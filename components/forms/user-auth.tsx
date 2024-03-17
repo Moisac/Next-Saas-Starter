@@ -46,7 +46,7 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
 
     setIsLoading(false)
 
-    if (!signInResult?.ok) {
+    if (signInResult && !signInResult?.ok) {
       toast.error('Something went wrong.', {
         description: 'Your sign in request failed. Please try again.',
       })
@@ -67,18 +67,19 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
 
     setIsGoogleLoading(false)
 
-    if (!signInResult?.ok) {
+    if (signInResult && !signInResult?.ok) {
       toast.error('Something went wrong.', {
-        description: 'Your sign in request failed. Please try again.',
+        description: `Your ${type === 'register' ? 'sign up' : 'login'} request failed. Please try again.`,
       })
     }
 
-    toast.success('Account successfully created', {
-      description: 'Your account was created using your Google account',
+    toast.success(`${type === 'register' ? 'Account successfully created' : 'Successfully logged in'}`, {
+      description: `${type === 'register' ? 'Your account was created using your Google account' : 'Successfully logged in using your Google account'}`,
     })
   }
 
   return (
+    // TODO: Fix display: none added on form when click login or login with google
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={handleSubmit(onSubmitEmail)}>
         <div className="grid gap-2">
@@ -108,7 +109,7 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
             )}
             {type === "register"
               ? "Sign Up with Email"
-              : "Sign In with Email"}
+              : "Login with Email"}
           </button>
         </div>
       </form>
@@ -118,7 +119,7 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
+            Or login with
           </span>
         </div>
       </div>
