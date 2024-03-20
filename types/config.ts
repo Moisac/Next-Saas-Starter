@@ -1,4 +1,12 @@
+import { LucideIcon } from "lucide-react"
 import { MainNavItem, SidebarNavItem } from "./layout"
+
+type Logo = {
+  src: string
+  alt: string
+  width: number
+  height: number
+}
 
 export type SiteConfig = {
     name: string
@@ -23,5 +31,12 @@ export type SiteConfig = {
   
   export type DashboardConfig = {
     mainNav: MainNavItem[]
-    sidebarNav: SidebarNavItem[]
+    sidebarNav: {
+      title: string;
+      logo: Logo;
+      collapsedLogo: Logo;
+      closeIcon: LucideIcon;
+      openIcon: LucideIcon;
+      links: SidebarNavItem[]
+    }
   }

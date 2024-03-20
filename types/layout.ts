@@ -1,4 +1,4 @@
-// import type { Icon } from "lucide-react"
+import { LucideIcon } from "lucide-react"
 
 
 export type NavItem = {
@@ -11,16 +11,10 @@ export type MainNavItem = NavItem
 
 export type SidebarNavItem = {
   title: string
+  label?: string
+  variant: "default" | "ghost"
   disabled?: boolean
   external?: boolean
-  icon?: any
-} & (
-  | {
-      href: string
-      items?: never
-    }
-  | {
-      href?: string
-      items: any[]
-    }
-)
+  icon?: LucideIcon
+  href: string
+}

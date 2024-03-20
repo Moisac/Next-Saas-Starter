@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation"
-import { DashboardNav } from "@/components/layout/nav"
 import { dashboardConfig } from "@/config/dashboard"
 import { getLoggedUser } from "@/lib/queries/user"
+import { SidebarNav } from "@/components/dashboard/sidebar-nav"
+import { DashboardHeader } from "@/components/dashboard/header"
 
 interface DashboardLayoutProps {
   children?: React.ReactNode
@@ -18,13 +19,13 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex min-h-screen flex-col space-y-6">
-      <div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr]">
-        <aside className="hidden w-[200px] flex-col md:flex">
-          <DashboardNav items={dashboardConfig.sidebarNav} />
-        </aside>
-        <main className="flex w-full flex-1 flex-col overflow-hidden">
-          {children}
-          <b>{ user?.email }</b>
+      <div className="flex gap-1">
+        <SidebarNav />
+        <main className="flex flex-1 flex-col overflow-hidden">
+          <DashboardHeader user={user} />
+          <div id="content" className="p-4">
+            {children}
+          </div>
         </main>
       </div>
     </div>

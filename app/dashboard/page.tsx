@@ -1,5 +1,3 @@
-import { DashboardHeader } from "@/components/dashboard/header"
-
 export const metadata = {
   title: "Dashboard",
 }
@@ -7,6 +5,8 @@ export const metadata = {
 export default async function DashboardPage() {
 
   return (
-    <DashboardHeader heading="Panel" text="Create and manage content." />
+    <div>
+      <h1>Dashboard</h1>
+    </div>
   )
 }

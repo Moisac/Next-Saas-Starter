@@ -1,4 +1,5 @@
 import type { DashboardConfig } from "@/types/config"
+import {  BarChartBig, PanelLeftClose, PanelLeftOpen, Settings, Sheet } from "lucide-react"
 
 export const dashboardConfig: DashboardConfig = {
   mainNav: [
@@ -12,21 +13,43 @@ export const dashboardConfig: DashboardConfig = {
       disabled: true,
     },
   ],
-  sidebarNav: [
-    {
-      title: "Panel",
-      href: "/dashboard",
-      icon: "post",
+  sidebarNav: {
+    title: "Menu",
+    logo: {
+      src:"./next.svg",
+      alt: "Next.js logo",
+      width: 150,
+      height: 150,
     },
-    {
-      title: "Billing",
-      href: "/dashboard/billing",
-      icon: "billing",
+    collapsedLogo: {
+      src:"./next-icon.svg",
+      alt: "Next.js icon",
+      width: 30,
+      height: 30,
     },
-    {
-      title: "Settings",
-      href: "/dashboard/settings",
-      icon: "settings",
-    },
-  ],
+    closeIcon: PanelLeftOpen,
+    openIcon: PanelLeftClose,
+    links: [
+      {
+        title: "Dashboard",
+        icon: BarChartBig,
+        variant: "default",
+        href: "/dashboard",
+      },
+      {
+        title: "Items",
+        label: "20",
+        icon: Sheet,
+        variant: "default",
+        href: "/dashboard/items",
+      },
+      {
+        title: "Settings",
+        label: "",
+        icon: Settings,
+        variant: "ghost",
+        href: "/dashboard/settings",
+      },
+    ],
+  }
 }

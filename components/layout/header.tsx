@@ -1,7 +1,8 @@
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { UserNav } from "@/components/user/user-nav"
 import Link from "next/link"
 import { getLoggedUser } from "@/lib/queries/user"
+import { cn } from "@/lib/utils"
 
 export async function Header() {
   const user = await getLoggedUser()
@@ -12,9 +13,14 @@ export async function Header() {
           <div className="main-menu">Menu</div>
           <div className="flex gap-5">
               { user ? <UserNav user={user} /> :     
-                <Button>
-                    <Link href="/login" className="text-sm font-medium">Login</Link> 
-                </Button>
+               <Link
+                href="/login"
+                className={cn(
+                  buttonVariants({ variant: "outline" })
+                )}
+              >
+                Login
+              </Link>
             }
           </div>
         </div>
