@@ -34,7 +34,7 @@ export function SidebarNav() {
     <aside className="hidden flex-col md:flex px-4 min-h-screen bg-card border-r">
       <div
         data-collapsed={isCollapsed}
-        className="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2 group-[data-collapsed=true]:w-[50px]"
+        className="group flex flex-col gap-4 py-2"
       >
         <nav className="flex flex-col gap-4">
         { isCollapsed ? 
@@ -45,7 +45,7 @@ export function SidebarNav() {
               width={sidebarNav.collapsedLogo.width} 
               height={sidebarNav.collapsedLogo.height}
               priority={false}
-              className="m-auto"
+              className="m-auto ease-in-out duration-200"
           />
           ) :
           (
@@ -55,7 +55,7 @@ export function SidebarNav() {
               width={sidebarNav.logo.width} 
               height={sidebarNav.logo.height}
               priority={false}
-              className="m-auto"
+              className="m-auto ease-in-out duration-200"
           />
           )
         }

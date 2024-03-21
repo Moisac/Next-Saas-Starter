@@ -16,13 +16,13 @@ export const dashboardConfig: DashboardConfig = {
   sidebarNav: {
     title: "Menu",
     logo: {
-      src:"./next.svg",
+      src:"/next.svg",
       alt: "Next.js logo",
       width: 150,
       height: 150,
     },
     collapsedLogo: {
-      src:"./next-icon.svg",
+      src:"/next-icon.svg",
       alt: "Next.js icon",
       width: 30,
       height: 30,

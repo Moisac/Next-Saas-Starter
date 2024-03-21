@@ -1,10 +1,10 @@
 import Google from "next-auth/providers/google"
+import EmailProvider from "next-auth/providers/email";
 
 import type { NextAuthConfig } from "next-auth"
 // import { siteConfig } from "@/config/site"
-// import { getUserByEmail } from "@/lib/user";
+// import { getUserByEmail } from "@/lib/queries/user";
 // import MagicLinkEmail from "@/emails/magic-link-email"
-// import { prisma } from "@/lib/db"
 
 export const authProviders: NextAuthConfig = {
   providers: [
@@ -12,7 +12,7 @@ export const authProviders: NextAuthConfig = {
       clientId: process.env.GOOGLE_CLIENT_ID ?? '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
     }),
-    // Email({
+    // EmailProvider({
     //   sendVerificationRequest: async ({ identifier, url, provider }) => {
     //     const user = await getUserByEmail(identifier);
     //     if (!user || !user.name) return null;

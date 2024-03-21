@@ -11,7 +11,7 @@ interface IDashboardHeader {
 export async function DashboardHeader({ user }: IDashboardHeader) {
 
   return (
-    <div className="w-full border-b bg-card">
+    <div className="w-full border-l border-b bg-card">
         <div className="flex justify-between p-4">
           <div className="main-menu">Menu</div>
           <div className="flex gap-5">
