@@ -21,6 +21,7 @@ import {
 import { signOut } from "next-auth/react";
 import Link from "next/link"
 import { User as UserType } from "@/types/user"
+import { DEFAULT_LOGOUT_REDIRECT } from "@/routes"
 
 export interface IUser {
     user: UserType | null;
@@ -68,7 +69,7 @@ export function UserNav({ user }: IUser) {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut()}>
+        <DropdownMenuItem onClick={() => signOut({callbackUrl: DEFAULT_LOGOUT_REDIRECT, redirect: true})}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>

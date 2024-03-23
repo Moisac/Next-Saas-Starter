@@ -12,9 +12,12 @@ import { userAuthSchema } from "@/lib/validations/auth"
 import { buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Loader2 } from "lucide-react"
+import { Loader2, Rocket } from "lucide-react"
 import { Google } from "../common/icons"
 import { toast } from "sonner"
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
+import { useState } from "react"
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
 
 
 interface UserAuthProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -31,8 +34,10 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
   } = useForm<FormData>({
     resolver: zodResolver(userAuthSchema),
   })
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
-  const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false)
+  const [isMagicLinkSend, setIsMagicLinkSend] = useState<boolean>(false)
+
   const searchParams = useSearchParams()
 
   async function onSubmitEmail(data: FormData) {
@@ -41,7 +46,7 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
     const signInResult = await signIn("email", {
       email: data.email.toLowerCase(),
       redirect: false,
-      callbackUrl: searchParams?.get("from") || "/dashboard",
+      callbackUrl: searchParams?.get("from") || DEFAULT_LOGIN_REDIRECT,
     })
 
     setIsLoading(false)
@@ -52,9 +57,9 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
       })
     }
 
-    toast.info('Check your email', {
-      description: 'We sent you a login link. Be sure to check your spam too.',
-    })
+    if(signInResult?.ok) {
+      setIsMagicLinkSend(true)
+    }
   }
 
   async function onSubmitGoogle() {
@@ -81,6 +86,19 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
   return (
     // TODO: Fix display: none added on form when click login or login with google
     <div className={cn("grid gap-6", className)} {...props}>
+      { isMagicLinkSend ?  
+        (
+          <Alert variant='info'>
+            <Rocket className="h-4 w-4" />
+            <AlertTitle>Check your email!</AlertTitle>
+            <AlertDescription>
+              {`We sent you a ${type === 'register' ? 'registration' : 'login'} link. Be sure to check your spam too.`}
+            </AlertDescription>
+          </Alert>
+
+        )
+        : null
+      }
       <form onSubmit={handleSubmit(onSubmitEmail)}>
         <div className="grid gap-2">
           <div className="grid gap-1">
@@ -103,7 +121,7 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
               </p>
             )}
           </div>
-          <button className={cn(buttonVariants())} disabled={isLoading}>
+          <button className={cn(buttonVariants())} disabled={isLoading || isMagicLinkSend}>
             {isLoading && (
               <Loader2 className="mr-2 size-4 animate-spin" />
             )}
