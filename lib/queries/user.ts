@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { auth } from "../auth";
+import { auth } from "@/auth";
 
 export const getUserByEmail = async (email: string) => {
   try {

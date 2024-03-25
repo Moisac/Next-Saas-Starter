@@ -12,7 +12,7 @@ import { userAuthSchema } from "@/lib/validations/auth"
 import { buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Loader2, Rocket } from "lucide-react"
+import { Loader2, MailWarning, Rocket } from "lucide-react"
 import { Google } from "../common/icons"
 import { toast } from "sonner"
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
@@ -23,6 +23,8 @@ import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
 interface UserAuthProps extends React.HTMLAttributes<HTMLDivElement> {
   type?: string
 }
+
+type MagicLinkStatus = 'default' | 'success' | 'error'
 
 type FormData = z.infer<typeof userAuthSchema>
 
@@ -36,14 +38,14 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
   })
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false)
-  const [isMagicLinkSend, setIsMagicLinkSend] = useState<boolean>(false)
+  const [magicLinkStatus, setMagicLinkStatus] = useState<MagicLinkStatus>('default')
 
   const searchParams = useSearchParams()
 
   async function onSubmitEmail(data: FormData) {
     setIsLoading(true)
 
-    const signInResult = await signIn("email", {
+    const signInResult = await signIn("magic-link", {
       email: data.email.toLowerCase(),
       redirect: false,
       callbackUrl: searchParams?.get("from") || DEFAULT_LOGIN_REDIRECT,
@@ -57,8 +59,12 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
       })
     }
 
-    if(signInResult?.ok) {
-      setIsMagicLinkSend(true)
+    if(signInResult?.error) {
+      setMagicLinkStatus('error')
+    }
+
+    if(signInResult?.ok && !signInResult?.error) {
+      setMagicLinkStatus('success')
     }
   }
 
@@ -83,25 +89,41 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
     })
   }
 
+  const MagicLinkStatusAlert = () => {
+    if(magicLinkStatus === 'success') {
+      return (
+        <Alert variant='info'>
+        <Rocket className="h-4 w-4" />
+        <AlertTitle>Check your email!</AlertTitle>
+        <AlertDescription>
+          {`We sent you a ${type === 'register' ? 'registration' : 'login'} link. Be sure to check your spam too.`}
+        </AlertDescription>
+      </Alert>
+      )
+    }
+
+    if(magicLinkStatus === 'error') {
+      return (
+        <Alert variant='destructive'>
+            <MailWarning className="h-4 w-4" />
+            <AlertTitle>Something went wrong!</AlertTitle>
+            <AlertDescription>
+              {`${type === 'register' ? 'Registration' : 'Login'} link was not sent. Please try again later.`}
+            </AlertDescription>
+        </Alert>
+      )
+    }
+  }
+
   return (
     // TODO: Fix display: none added on form when click login or login with google
     <div className={cn("grid gap-6", className)} {...props}>
-      { isMagicLinkSend ?  
-        (
-          <Alert variant='info'>
-            <Rocket className="h-4 w-4" />
-            <AlertTitle>Check your email!</AlertTitle>
-            <AlertDescription>
-              {`We sent you a ${type === 'register' ? 'registration' : 'login'} link. Be sure to check your spam too.`}
-            </AlertDescription>
-          </Alert>
-
-        )
-        : null
-      }
+      <MagicLinkStatusAlert />
       <form onSubmit={handleSubmit(onSubmitEmail)}>
         <div className="grid gap-2">
           <div className="grid gap-1">
+
+            {/* Email input */}
             <Label className="sr-only" htmlFor="email">
               Email
             </Label>
@@ -121,7 +143,7 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
               </p>
             )}
           </div>
-          <button className={cn(buttonVariants())} disabled={isLoading || isMagicLinkSend}>
+          <button className={cn(buttonVariants())} disabled={isLoading || magicLinkStatus === 'success'}>
             {isLoading && (
               <Loader2 className="mr-2 size-4 animate-spin" />
             )}

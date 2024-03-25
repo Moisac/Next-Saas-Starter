@@ -1,5 +1,4 @@
-import { notFound } from "next/navigation"
-import { dashboardConfig } from "@/config/dashboard"
+import { redirect } from "next/navigation"
 import { getLoggedUser } from "@/lib/queries/user"
 import { SidebarNav } from "@/components/dashboard/sidebar-nav"
 import { DashboardHeader } from "@/components/dashboard/header"
@@ -14,7 +13,7 @@ export default async function DashboardLayout({
   const user = await getLoggedUser()
 
   if (!user) {
-    return notFound()
+    redirect('/login')
   }
 
   return (

@@ -1,35 +1,25 @@
 import Google from "next-auth/providers/google"
-import EmailProvider from "next-auth/providers/email"
-
-import type { NextAuthConfig } from "next-auth"
 import { siteConfig } from "@/config/site"
 import { getUserByEmail } from "@/lib/queries/user";
-import MagicLinkEmail from "../emails/templates/magic-link-email"
-import { resend } from "../emails/send-email";
+import MagicLinkEmail from "./lib/emails/templates/magic-link-email"
+import { resend } from "./lib/emails/send-email";
 
-export const authProviders: NextAuthConfig = {
+export default {
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID ?? '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
     }),
-    EmailProvider ({
-      server: {
-            host: process.env.EMAIL_SERVER_HOST,
-            port: Number(process.env.EMAIL_SERVER_PORT),
-            auth: {
-              user: process.env.EMAIL_SERVER_USER,
-              pass: process.env.RESEND_API_KEY,
-            },
-          },
-          from: process.env.EMAIL_FROM,
-    
+
+    // Custom provider for sending maginc links using Resend api
+    // https://authjs.dev/guides/providers/email-http
+    {
+      id: 'magic-link',
+      type: 'email',
       sendVerificationRequest: async ({ identifier, url, provider }) => {
         const user = await getUserByEmail(identifier);
-        if (!user || !user.name) return null;
 
-        const userVerified = user?.emailVerified ? true : false;
-        const authSubject = userVerified ? `Login link for ${siteConfig.name}` : `Activate ${siteConfig.name} your account`;
+        const authSubject = user?.emailVerified ? `Login link for ${siteConfig.name}` : `Activate ${siteConfig.name} your account`;
 
         try {
           const { data, error } = await resend.emails.send({
@@ -40,7 +30,7 @@ export const authProviders: NextAuthConfig = {
             react: MagicLinkEmail({
               firstName: user?.name as string,
               actionUrl: url,
-              mailType: userVerified ? "login" : "register",
+              mailType: user?.emailVerified ? "login" : "register",
               siteName: siteConfig.name
             }),
             // Set this to prevent Gmail from threading emails.
@@ -54,11 +44,10 @@ export const authProviders: NextAuthConfig = {
             throw new Error(error?.message)
           }
 
-          // console.log(data)
         } catch (error) {
           throw new Error("Failed to send verification email.")
         }
       },
-    }),
+    },
   ],
 }

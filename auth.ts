@@ -1,12 +1,13 @@
 import NextAuth from "next-auth"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import prisma from "@/lib/db"
-import { authProviders } from "./auth-providers"
 import { getUserById } from "@/lib/queries/user"
+import authConfig from "@/auth.config"
 
 export const { 
   handlers: { GET, POST },
   auth,
+  // @ts-ignore
 } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
@@ -46,6 +47,6 @@ export const {
       return token;
     },
   },
-  ...authProviders,
+  ...authConfig,
   debug: process.env.NODE_ENV !== "production"
 })
