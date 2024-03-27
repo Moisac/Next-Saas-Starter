@@ -7,6 +7,8 @@ import authConfig from "@/auth.config"
 export const { 
   handlers: { GET, POST },
   auth,
+  signIn,
+  signOut
   // @ts-ignore
 } = NextAuth({
   adapter: PrismaAdapter(prisma),

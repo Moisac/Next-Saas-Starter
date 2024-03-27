@@ -2,9 +2,7 @@
 
 import * as React from "react"
 import { useSearchParams } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { signIn } from "next-auth/react"
-import { useForm } from "react-hook-form"
 import * as z from "zod"
 
 import { cn } from "@/lib/utils"
@@ -15,9 +13,10 @@ import { Label } from "@/components/ui/label"
 import { Loader2, MailWarning, Rocket } from "lucide-react"
 import { Google } from "../common/icons"
 import { toast } from "sonner"
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
 import { useState } from "react"
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
+import { magicLinkLogin } from "@/actions/magic-link-login"
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
 
 
 interface UserAuthProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -29,68 +28,64 @@ type MagicLinkStatus = 'default' | 'success' | 'error'
 type FormData = z.infer<typeof userAuthSchema>
 
 export async function UserAuth({ className, type, ...props }: UserAuthProps) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(userAuthSchema),
-  })
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const [isFormLoading, setIsFormLoading] = useState<boolean>(false)
   const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false)
-  const [magicLinkStatus, setMagicLinkStatus] = useState<MagicLinkStatus>('default')
+  const [magicLinkFormStatus, setMagicLinkFormStatus] = useState<MagicLinkStatus>('default')
+  const [validationErrors, setValidationErrors] = useState<string>()
 
   const searchParams = useSearchParams()
 
-  async function onSubmitEmail(data: FormData) {
-    setIsLoading(true)
+  const onSubmitEmail = async (formData: FormData) => {
+    
+    try {
+      setIsFormLoading(true)
+      const signInResult = await magicLinkLogin(formData, searchParams?.get("from"))
 
-    const signInResult = await signIn("magic-link", {
-      email: data.email.toLowerCase(),
-      redirect: false,
-      callbackUrl: searchParams?.get("from") || DEFAULT_LOGIN_REDIRECT,
-    })
-
-    setIsLoading(false)
-
-    if (signInResult && !signInResult?.ok) {
-      toast.error('Something went wrong.', {
-        description: 'Your sign in request failed. Please try again.',
-      })
+      if ((signInResult && signInResult?.error) || !signInResult) {
+        setMagicLinkFormStatus('error')
+      } else if(signInResult && signInResult?.validation) {
+        setValidationErrors(signInResult?.validation?.email)
+      } else {
+        setMagicLinkFormStatus('success')
+      }
+    } catch (error) {
+      setMagicLinkFormStatus('error')
     }
-
-    if(signInResult?.error) {
-      setMagicLinkStatus('error')
-    }
-
-    if(signInResult?.ok && !signInResult?.error) {
-      setMagicLinkStatus('success')
+    finally {
+      setIsFormLoading(false)
     }
   }
 
   async function onSubmitGoogle() {
+   try {
     setIsGoogleLoading(true)
 
     const signInResult = await signIn("google", {
       redirect: false,
-      callbackUrl: searchParams?.get("from") || "/dashboard",
+      callbackUrl: searchParams?.get("from") || DEFAULT_LOGIN_REDIRECT,
     })
 
-    setIsGoogleLoading(false)
-
-    if (signInResult && !signInResult?.ok) {
+    if ((signInResult && !signInResult?.ok) || !signInResult) {
       toast.error('Something went wrong.', {
         description: `Your ${type === 'register' ? 'sign up' : 'login'} request failed. Please try again.`,
       })
+    } else {
+      toast.success(`${type === 'register' ? 'Account successfully created' : 'Successfully logged in'}`, {
+        description: `${type === 'register' ? 'Your account was created using your Google account' : 'Successfully logged in using your Google account'}`,
+      })
     }
 
-    toast.success(`${type === 'register' ? 'Account successfully created' : 'Successfully logged in'}`, {
-      description: `${type === 'register' ? 'Your account was created using your Google account' : 'Successfully logged in using your Google account'}`,
-    })
+    
+   } catch (error) {
+    return error
+   } finally {
+    setIsGoogleLoading(false)
+   }
   }
 
   const MagicLinkStatusAlert = () => {
-    if(magicLinkStatus === 'success') {
+    if(magicLinkFormStatus === 'success') {
       return (
         <Alert variant='info'>
         <Rocket className="h-4 w-4" />
@@ -102,7 +97,7 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
       )
     }
 
-    if(magicLinkStatus === 'error') {
+    if(magicLinkFormStatus === 'error') {
       return (
         <Alert variant='destructive'>
             <MailWarning className="h-4 w-4" />
@@ -119,7 +114,7 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
     // TODO: Fix display: none added on form when click login or login with google
     <div className={cn("grid gap-6", className)} {...props}>
       <MagicLinkStatusAlert />
-      <form onSubmit={handleSubmit(onSubmitEmail)}>
+      <form action={onSubmitEmail}>
         <div className="grid gap-2">
           <div className="grid gap-1">
 
@@ -129,22 +124,25 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
             </Label>
             <Input
               id="email"
+              name="email"
               placeholder="name@example.com"
-              type="email"
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={isLoading || isGoogleLoading}
-              {...register("email")}
+              disabled={isFormLoading || isGoogleLoading || magicLinkFormStatus === 'success'}
             />
-            {errors?.email && (
+            {validationErrors && (
               <p className="px-1 text-xs text-red-600">
-                {errors.email.message}
+                {validationErrors}
               </p>
             )}
           </div>
-          <button className={cn(buttonVariants())} disabled={isLoading || magicLinkStatus === 'success'}>
-            {isLoading && (
+          <button 
+            type="submit" 
+            className={cn(buttonVariants())} 
+            disabled={isFormLoading || magicLinkFormStatus === 'success'}
+          >
+            {isFormLoading && (
               <Loader2 className="mr-2 size-4 animate-spin" />
             )}
             {type === "register"
@@ -164,10 +162,9 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
         </div>
       </div>
       <button
-        type="button"
         className={cn(buttonVariants({ variant: "outline" }))}
         onClick={onSubmitGoogle}
-        disabled={isLoading || isGoogleLoading}
+        disabled={isFormLoading || isGoogleLoading}
       >
         {isGoogleLoading ? (
           <Loader2 className="mr-2 size-4 animate-spin" />

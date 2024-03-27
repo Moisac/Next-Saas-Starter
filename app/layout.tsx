@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         {children}
-        <Toaster expand={true} richColors closeButton />
+        <Toaster expand={true} richColors closeButton position="top-center"/>
       </body>
     </html>
   );
