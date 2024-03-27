@@ -60,13 +60,13 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
   async function onSubmitGoogle() {
    try {
     setIsGoogleLoading(true)
-
+    
     const signInResult = await signIn("google", {
       redirect: false,
       callbackUrl: searchParams?.get("from") || DEFAULT_LOGIN_REDIRECT,
     })
 
-    if ((signInResult && !signInResult?.ok) || !signInResult) {
+    if (signInResult && !signInResult?.ok) {
       toast.error('Something went wrong.', {
         description: `Your ${type === 'register' ? 'sign up' : 'login'} request failed. Please try again.`,
       })
@@ -75,8 +75,6 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
         description: `${type === 'register' ? 'Your account was created using your Google account' : 'Successfully logged in using your Google account'}`,
       })
     }
-
-    
    } catch (error) {
     return error
    } finally {
