@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { LogOut, PlusCircle, Settings, User } from "lucide-react"
+import { BarChartBig, LogOut, PlusCircle, User } from "lucide-react"
 
 import {
   Avatar,
@@ -15,13 +15,11 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
 import { User as UserType } from "@/types/user"
-import { DEFAULT_LOGOUT_REDIRECT } from "@/routes"
-import { logout } from "@/actions/logout"
+import { logout } from "@/actions/auth/logout"
 
 export interface IUser {
     user: UserType | null;
@@ -34,7 +32,7 @@ export function UserNav({ user }: IUser) {
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
             <AvatarImage src={user?.image} alt={user?.name}/>
-            <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
+            <AvatarFallback>{user?.email?.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -50,7 +48,7 @@ export function UserNav({ user }: IUser) {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <User className="mr-2 h-4 w-4" />
+            <BarChartBig className="mr-2 h-4 w-4" />
             <Link
               href="/dashboard"
               className="text-sm font-medium transition-colors hover:text-primary"
@@ -59,9 +57,13 @@ export function UserNav({ user }: IUser) {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+            <User  className="mr-2 h-4 w-4" />
+            <Link
+              href="/dashboard/account"
+              className="text-sm font-medium transition-colors hover:text-primary"
+            >
+              Account
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <PlusCircle className="mr-2 h-4 w-4" />
@@ -69,10 +71,9 @@ export function UserNav({ user }: IUser) {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => logout()}>
+        <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

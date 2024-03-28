@@ -7,15 +7,14 @@ import * as z from "zod"
 
 import { cn } from "@/lib/utils"
 import { userAuthSchema } from "@/lib/validations/auth"
-import { buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Loader2, MailWarning, Rocket } from "lucide-react"
 import { Google } from "../common/icons"
-import { toast } from "sonner"
 import { useState } from "react"
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
-import { magicLinkLogin } from "@/actions/magic-link-login"
+import { magicLinkLogin } from "@/actions/auth/magic-link-login"
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
 
 
@@ -61,20 +60,10 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
    try {
     setIsGoogleLoading(true)
     
-    const signInResult = await signIn("google", {
+    await signIn("google", {
       redirect: false,
       callbackUrl: searchParams?.get("from") || DEFAULT_LOGIN_REDIRECT,
     })
-
-    if (signInResult && !signInResult?.ok) {
-      toast.error('Something went wrong.', {
-        description: `Your ${type === 'register' ? 'sign up' : 'login'} request failed. Please try again.`,
-      })
-    } else {
-      toast.success(`${type === 'register' ? 'Account successfully created' : 'Successfully logged in'}`, {
-        description: `${type === 'register' ? 'Your account was created using your Google account' : 'Successfully logged in using your Google account'}`,
-      })
-    }
    } catch (error) {
     return error
    } finally {
@@ -135,9 +124,8 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
               </p>
             )}
           </div>
-          <button 
+          <Button 
             type="submit" 
-            className={cn(buttonVariants())} 
             disabled={isFormLoading || magicLinkFormStatus === 'success'}
           >
             {isFormLoading && (
@@ -146,7 +134,7 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
             {type === "register"
               ? "Sign Up with Email"
               : "Login with Email"}
-          </button>
+          </Button>
         </div>
       </form>
       <div className="relative">
@@ -159,8 +147,8 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
           </span>
         </div>
       </div>
-      <button
-        className={cn(buttonVariants({ variant: "outline" }))}
+      <Button
+        variant="outline"
         onClick={onSubmitGoogle}
         disabled={isFormLoading || isGoogleLoading}
       >
@@ -170,7 +158,7 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
           <Google className="mr-2 size-4"/>
         )}{" "}
         Google
-      </button>
+      </Button>
     </div>
   )
 }

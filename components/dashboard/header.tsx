@@ -1,7 +1,6 @@
-import { buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { UserNav } from "@/components/user/user-nav"
 import Link from "next/link"
-import { cn } from "@/lib/utils"
 import { User } from "@/types/user";
 
 interface IDashboardHeader {
@@ -16,14 +15,11 @@ export async function DashboardHeader({ user }: IDashboardHeader) {
           <div className="main-menu">Menu</div>
           <div className="flex gap-5">
               { user ? <UserNav user={user} /> :     
-               <Link
-                href="/login"
-                className={cn(
-                  buttonVariants({ variant: "outline" })
-                )}
-              >
-                Login
-              </Link>
+              <Button variant="outline" asChild>
+                <Link href="/login">
+                  Login
+                </Link>
+              </Button>
             }
           </div>
         </div>

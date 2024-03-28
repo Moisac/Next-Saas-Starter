@@ -4,8 +4,7 @@ import Link from "next/link"
 import { UserAuth } from "@/components/forms/user-auth"
 import { Suspense } from "react"
 import { ChevronLeft } from "lucide-react"
-import { buttonVariants } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 
 export const metadata: Metadata = {
   title: "Login",
@@ -15,18 +14,17 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <div className="container flex h-screen w-screen flex-col items-center justify-center">
-      <Link
-        href="/"
-        className={cn(
-          buttonVariants({ variant: "outline", size: "sm" }),
-          "absolute left-4 top-4 md:left-8 md:top-8"
-        )}
-      >
-        <>
-          <ChevronLeft className="mr-2 size-4" />
-          Back
-        </>
-      </Link>
+      <Button variant="outline" size="sm" asChild>
+        <Link
+          href="/"
+          className={"absolute left-4 top-4 md:left-8 md:top-8"}
+        >
+          <>
+            <ChevronLeft className="mr-2 size-4" />
+            Back
+          </>
+        </Link>
+      </Button>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex flex-col space-y-2 text-center">
           <h1 className="text-2xl font-semibold tracking-tight">

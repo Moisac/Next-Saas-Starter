@@ -2,9 +2,7 @@ import Link from "next/link"
 
 import { UserAuth } from "@/components/forms/user-auth"
 import { Suspense } from "react"
-import { buttonVariants } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import { ChevronLeft } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 export const metadata = {
   title: "Create an account",
@@ -14,27 +12,14 @@ export const metadata = {
 export default function RegisterPage() {
   return (
     <div className="container grid h-screen w-screen flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
-        <Link
-        href="/"
-        className={cn(
-          buttonVariants({ variant: "outline", size: "sm" }),
-          "absolute left-4 top-4 md:left-8 md:top-8"
-        )}
-      >
-        <>
-          <ChevronLeft className="mr-2 size-4" />
-          Back
-        </>
-      </Link>
-      <Link
-        href="/login"
-        className={cn(
-          buttonVariants({ variant: "ghost" }),
-          "absolute right-4 top-4 md:right-8 md:top-8"
-        )}
-      >
-        Login
-      </Link>
+        <Button variant="ghost" asChild>
+          <Link
+            href="/login"
+            className="absolute right-4 top-4 md:right-8 md:top-8"
+          >
+            Login
+          </Link>
+        </Button>
       <div className="hidden h-full bg-muted lg:block" />
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">

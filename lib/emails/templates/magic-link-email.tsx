@@ -26,7 +26,7 @@ import {
     <Html>
       <Head />
       <Preview>
-        The sales intelligence platform that helps you uncover qualified leads.
+        The Saas starter project built with Next.js
       </Preview>
       <Tailwind>
         <Body className="bg-white font-sans">
