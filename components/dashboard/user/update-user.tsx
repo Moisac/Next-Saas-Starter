@@ -6,9 +6,9 @@ import { SubmitButton } from "@/components/common/submit-button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { userUpdateSchema } from "@/lib/validations/user"
 import { User } from "@/types/user"
-import { useEffect } from "react"
-import { useFormState } from "react-dom"
+import { useState } from "react"
 import { toast } from "sonner"
 
 interface IUpdateUser {
@@ -16,19 +16,32 @@ interface IUpdateUser {
 }
   
   export function UpdateUser({ user }: IUpdateUser) {
+    const [formState, setFormState] = useState<{validation?: { name?: string[] }}>({})
 
-    const [state, formAction] = useFormState(updateUser, undefined)
+    const updateUserWithId = updateUser.bind(null, user?.id)
+    
+    const clientFormAction = async (formData: FormData) => {
+        const validatedFields = userUpdateSchema.safeParse(Object.fromEntries(formData))
 
-    useEffect(() => {
-        if(state?.success) {
-            toast.success('User successfully updated')
+        if (!validatedFields.success) {
+            setFormState({ validation: validatedFields.error.flatten().fieldErrors })
+        } else {
+            setFormState({})
         }
-    
-        if(state?.error) {
-            toast.error(state?.error)
+
+      if(validatedFields.success) {
+        const response = await updateUserWithId(user?.id, formData)
+
+        if(response?.error) {
+            toast.error(response?.error)
         }
-    }, [state])
-    
+
+        if(response?.success) {
+            toast.success(response?.success)
+        }
+      }
+    }
+
     return (
        <div>
          <Card className="m-auto max-w-xl">
@@ -36,7 +49,7 @@ interface IUpdateUser {
                 <CardTitle>Edit account</CardTitle>
             </CardHeader>
             <CardContent>
-                <form action={formAction}>
+                <form action={clientFormAction}>
                     <div className="grid gap-5">
                         {/* Email input */}
                         <div className="grid gap-1">
@@ -63,7 +76,7 @@ interface IUpdateUser {
                                 defaultValue={user?.name ?? ''}
                                 disabled={false}
                             />
-                            <InputErrors inputErrors={state?.validation?.name}/>
+                            <InputErrors inputErrors={formState?.validation?.name}/>
                         </div>
                         <SubmitButton>Save changes</SubmitButton>
                     </div>

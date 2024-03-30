@@ -5,11 +5,11 @@ import { getLoggedUser } from "@/lib/queries/user";
 import { userUpdateSchema } from "@/lib/validations/user"
 import { revalidatePath } from "next/cache";
 
-export const updateUser = async (prevState: unknown, formData: FormData) => {
+export const updateUser = async (userId: string, prevState: unknown, formData: FormData) => {
     const user = await getLoggedUser();
 
-    if(!user?.email) {
-        return { error: 'User doesn\'t exist' }
+    if(!user?.id || user?.id !== userId) {
+        return { error: 'Unauthorized request' }
     }
 
     const validatedFields = userUpdateSchema.safeParse(Object.fromEntries(formData))
@@ -28,12 +28,12 @@ export const updateUser = async (prevState: unknown, formData: FormData) => {
 
     try {
         const response = await prisma.user.update({
-            where: { email: user?.email },
-            data: { name: validatedFields?.data?.name, email: 'moisaclaudiu2309@gmail.com' },
+            where: { id: user?.id },
+            data: { name: validatedFields?.data?.name },
         });
 
         if(response.email) {
-            return { success: true }
+            return { success: 'User successfully updated' }
         }
     } catch (error) {
         return { error: 'User could not be updated.' }
