@@ -1,14 +1,11 @@
-import { CardSkeleton } from "@/components/common/card-skeleton"
-import { DashboardHeader } from "@/components/dashboard/header"
-import { Button } from "@/components/ui/button"
+import { CardSkeleton } from "@/components/common/skeletons"
 
 export default function DashboardLoading() {
   return (
     <div>
-      <DashboardHeader heading="Posts" text="Create and manage posts.">
-        <Button>Fake button</Button>
-      </DashboardHeader>
-      <div className="divide-border-200 divide-y rounded-md border">
+      <div className="rounded-md grid grid-cols-3 gap-4">
+        <CardSkeleton />
+        <CardSkeleton />
         <CardSkeleton />
         <CardSkeleton />
         <CardSkeleton />

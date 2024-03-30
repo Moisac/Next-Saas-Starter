@@ -2,6 +2,7 @@ import { redirect } from "next/navigation"
 import { getLoggedUser } from "@/lib/queries/user"
 import { SidebarNav } from "@/components/dashboard/sidebar-nav"
 import { DashboardHeader } from "@/components/dashboard/header"
+import { User } from "@/types/user"
 
 interface DashboardLayoutProps {
   children?: React.ReactNode
@@ -21,7 +22,7 @@ export default async function DashboardLayout({
       <div className="flex gap-1">
         <SidebarNav />
         <main className="flex flex-1 flex-col overflow-hidden">
-          <DashboardHeader user={user} />
+          <DashboardHeader user={user as User} />
           <div id="content" className="p-4">
             {children}
           </div>
