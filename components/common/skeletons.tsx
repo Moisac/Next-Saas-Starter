@@ -18,7 +18,7 @@ export function CardSkeleton() {
   )
 }
 
-export function DashoardHeaderSkeleton() {
+export function DashboardHeaderSkeleton() {
   return (
     <Card className="flex justify-between px-4 py-2 mb-4">
        <div className="flex items-center gap-1">

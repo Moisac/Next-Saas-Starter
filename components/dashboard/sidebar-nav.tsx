@@ -37,28 +37,30 @@ export function SidebarNav() {
         className="group flex flex-col gap-4 py-2"
       >
         <nav className="flex flex-col gap-4">
+       <Link href="/">
         { isCollapsed ? 
-          (
-            <Image 
-              src={sidebarNav.collapsedLogo.src} 
-              alt={sidebarNav.collapsedLogo.alt} 
-              width={sidebarNav.collapsedLogo.width} 
-              height={sidebarNav.collapsedLogo.height}
-              priority={false}
-              className="m-auto ease-in-out duration-200"
-          />
-          ) :
-          (
-            <Image 
-              src={sidebarNav.logo.src} 
-              alt={sidebarNav.logo.alt} 
-              width={sidebarNav.logo.width} 
-              height={sidebarNav.logo.height}
-              priority={false}
-              className="m-auto ease-in-out duration-200"
-          />
-          )
-        }
+            (
+              <Image 
+                src={sidebarNav.collapsedLogo.src} 
+                alt={sidebarNav.collapsedLogo.alt} 
+                width={sidebarNav.collapsedLogo.width} 
+                height={sidebarNav.collapsedLogo.height}
+                priority={false}
+                className="m-auto ease-in-out duration-200"
+            />
+            ) :
+            (
+              <Image 
+                src={sidebarNav.logo.src} 
+                alt={sidebarNav.logo.alt} 
+                width={sidebarNav.logo.width} 
+                height={sidebarNav.logo.height}
+                priority={false}
+                className="m-auto ease-in-out duration-200"
+            />
+            )
+          }
+       </Link>
 
         <Separator />
 

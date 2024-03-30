@@ -3,6 +3,8 @@ import { getLoggedUser } from "@/lib/queries/user"
 import { SidebarNav } from "@/components/dashboard/sidebar-nav"
 import { DashboardHeader } from "@/components/dashboard/header"
 import { User } from "@/types/user"
+import { Suspense } from "react"
+import { DashboardHeaderSkeleton } from "@/components/common/skeletons"
 
 interface DashboardLayoutProps {
   children?: React.ReactNode
@@ -22,7 +24,9 @@ export default async function DashboardLayout({
       <div className="flex gap-1">
         <SidebarNav />
         <main className="flex flex-1 flex-col overflow-hidden">
-          <DashboardHeader user={user as User} />
+          <Suspense fallback={<DashboardHeaderSkeleton />}>
+            <DashboardHeader user={user as User} />
+          </Suspense>
           <div id="content" className="p-4">
             {children}
           </div>
