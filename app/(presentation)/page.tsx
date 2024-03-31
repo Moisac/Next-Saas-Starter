@@ -1,12 +1,15 @@
-import { Header } from "@/components/layout/header";
+
+export const metadata = {
+  title: "Homepage",
+}
+
 
 export default function Home() {
   return (
     <>
-        <Header />
-        <main>
+        <div>
           <h1>NextJs Saas Starter</h1>
-        </main>
+        </div>
     </>
   );
 }

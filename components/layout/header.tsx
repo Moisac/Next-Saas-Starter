@@ -8,7 +8,7 @@ export async function Header() {
   const user = await getLoggedUser()
 
   return (
-    <div className="w-full border-b">
+    <header className="w-full border-b">
         <div className="flex justify-between p-4">
           <div className="main-menu">Menu</div>
           <div className="flex gap-5">
@@ -23,6 +23,6 @@ export async function Header() {
             }
           </div>
         </div>
-    </div>
+    </header>
   )
 }

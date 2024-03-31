@@ -6,9 +6,12 @@ export default function PresentationLayout({
   children: React.ReactNode;
 }>) {
   return (
-   <div>
+   <>
      <Header />
-     {children}
-   </div>
+     <main className="p-4">
+      {children}
+     </main>
+     <footer className="p-4">Footer</footer>
+   </>
   );
 }

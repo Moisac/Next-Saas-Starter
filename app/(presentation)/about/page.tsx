@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "About ",
+  title: "About",
 }
 
 export default async function AboutPage() {
