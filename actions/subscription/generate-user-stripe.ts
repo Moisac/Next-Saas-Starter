@@ -14,7 +14,6 @@ export type responseAction = {
 const billingUrl = absoluteUrl("/pricing")
 
 export async function generateUserStripe(priceId: string): Promise<responseAction> {
-  console.log({priceId})
   let redirectUrl: string = "";
 
   try {
@@ -37,7 +36,7 @@ export async function generateUserStripe(priceId: string): Promise<responseActio
     } else {
       // User on Free Plan - Create a checkout session to upgrade.
       const stripeSession = await stripe.checkout.sessions.create({
-        success_url: billingUrl,
+        success_url: `${billingUrl}?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: billingUrl,
         payment_method_types: ["card"],
         mode: "subscription",

@@ -49,6 +49,7 @@ export async function getUserSubscriptionPlan(
     const stripePlan = await stripe.subscriptions.retrieve(
       user.stripeSubscriptionId
     )
+    console.log({stripePlan})
     isCanceled = stripePlan.cancel_at_period_end
   }
 
