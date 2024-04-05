@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 import { stripe } from "@/lib/stripe";
 import { absoluteUrl } from "@/lib/utils";
 import { redirect } from "next/navigation";
-import { getUserSubscriptionPlan } from "./get-user-subscription";
+import { getUserSubscriptionPlan } from "@/lib/queries/stripe/get-user-subscription";
 
 export type responseAction = {
   status: "success" | "error";

@@ -3,8 +3,10 @@ import { redirect } from "next/navigation"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { TriangleAlert } from "lucide-react"
 import { BillingInfo } from "@/components/dashboard/subscription/billing-info"
-import { getUserSubscriptionPlan } from "@/actions/subscription/get-user-subscription"
+import { getUserSubscriptionPlan } from "@/lib/queries/stripe/get-user-subscription"
 import { getLoggedUser } from "@/lib/queries/user"
+import { getUserInvoices } from "@/lib/queries/stripe/get-user-invoices"
+import { UserInvoicesTable } from "@/components/dashboard/subscription/user-invoices-table"
 
 export const metadata = {
   title: "Billing",
@@ -19,10 +21,11 @@ export default async function BillingPage() {
   }
 
   const subscriptionPlan = await getUserSubscriptionPlan(user.id)
+  const userInvoices = await getUserInvoices(user?.stripeCustomerId)
 
   return (
       <div className="grid gap-8">
-        <Alert className="!pl-14">
+        <Alert variant="info" className="!pl-14">
             <TriangleAlert />
           <AlertTitle>This is a demo app.</AlertTitle>
           <AlertDescription>
@@ -42,6 +45,8 @@ export default async function BillingPage() {
         <BillingInfo
           subscriptionPlan={subscriptionPlan}
         />
+
+       { userInvoices?.length ? <UserInvoicesTable data={userInvoices ?? []} /> : null }
       </div>
   )
 }

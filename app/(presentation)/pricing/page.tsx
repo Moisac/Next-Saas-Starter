@@ -1,4 +1,4 @@
-import { getUserSubscriptionPlan } from "@/actions/subscription/get-user-subscription";
+import { getUserSubscriptionPlan } from "@/lib/queries/stripe/get-user-subscription";
 import { PricingCards } from "@/components/presentation/pricing-cards";
 import { getLoggedUser } from "@/lib/queries/user";
 

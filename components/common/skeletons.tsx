@@ -2,9 +2,9 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Slash } from "lucide-react"
 
-export function CardSkeleton() {
+export function CardSkeleton({className}: {className?: string}) {
   return (
-    <Card>
+    <Card className={className ?? ''}>
       <CardHeader>
         <Skeleton className="h-5" />
       </CardHeader>

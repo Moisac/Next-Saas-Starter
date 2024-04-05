@@ -1,5 +1,3 @@
-'use server'
-
 import { pricingData } from "@/config/subscriptions";
 import prisma from "@/lib/db";
 import { stripe } from "@/lib/stripe";
@@ -26,8 +24,8 @@ export async function getUserSubscriptionPlan(
 
   // Check if user is on a paid plan.
   const isPaid =
-    user.stripePriceId &&
-    user.stripeCurrentPeriodEnd?.getTime() + 86_400_000 > Date.now() ? true : false;
+    user.stripePriceId && user.stripeCurrentPeriodEnd &&
+    user.stripeCurrentPeriodEnd.getTime() + 86_400_000 > Date.now() ? true : false;
 
   // Find the pricing data corresponding to the user's plan
   const userPlan =
@@ -49,14 +47,14 @@ export async function getUserSubscriptionPlan(
     const stripePlan = await stripe.subscriptions.retrieve(
       user.stripeSubscriptionId
     )
-    console.log({stripePlan})
+
     isCanceled = stripePlan.cancel_at_period_end
   }
 
   return {
     ...plan,
     ...user,
-    stripeCurrentPeriodEnd: user.stripeCurrentPeriodEnd?.getTime(),
+    stripeCurrentPeriodEnd: user.stripeCurrentPeriodEnd?.getTime() as number,
     isPaid,
     interval,
     isCanceled
