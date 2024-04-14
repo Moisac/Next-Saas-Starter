@@ -5,7 +5,7 @@ import { ArrowUpDown, CloudDownload, Copy, EllipsisVertical, ExternalLink } from
 import { Invoice } from "@/types/subscription"
 import { Button } from "@/components/ui/button"
 import { Table } from "@/components/common/table"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
@@ -89,6 +89,7 @@ const columns = [
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem
           onClick={() => navigator.clipboard.writeText(row.original.id)}
+          className="cursor-pointer"
         >
           <Copy className="h-4 w-4 pr-1" /> Copy invoice ID
         </DropdownMenuItem>
@@ -102,7 +103,7 @@ const columns = [
         <DropdownMenuItem>
           <CloudDownload className="h-4 w-4 pr-1" /> 
           <Link href={row.original.invoice_pdf} target="_blank">
-            View invoice
+            Download invoice
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -114,9 +115,9 @@ const columns = [
 
 export function UserInvoicesTable({ data }: UserInvoiceTable) {
   return (
-    <Card className="max-w-[80vw]">
+    <Card className="max-w-[1300px]">
       <CardHeader>
-        Invoices
+        <CardTitle>Invoices</CardTitle>
       </CardHeader>
       <CardContent>
         <Table data={data} columns={columns} />

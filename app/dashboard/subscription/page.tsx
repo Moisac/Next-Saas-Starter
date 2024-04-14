@@ -5,15 +5,13 @@ import { TriangleAlert } from "lucide-react"
 import { BillingInfo } from "@/components/dashboard/subscription/billing-info"
 import { getUserSubscriptionPlan } from "@/lib/queries/stripe/get-user-subscription"
 import { getLoggedUser } from "@/lib/queries/user"
-import { getUserInvoices } from "@/lib/queries/stripe/get-user-invoices"
-import { UserInvoicesTable } from "@/components/dashboard/subscription/user-invoices-table"
 
 export const metadata = {
-  title: "Billing",
-  description: "Manage billing and your subscription plan.",
+  title: "Subscription plan",
+  description: "Manage subscription plan.",
 }
 
-export default async function BillingPage() {
+export default async function SubscriptionPage() {
   const user = await getLoggedUser()
 
   if (!user && !user?.id) {
@@ -21,7 +19,6 @@ export default async function BillingPage() {
   }
 
   const subscriptionPlan = await getUserSubscriptionPlan(user.id)
-  const userInvoices = await getUserInvoices(user?.stripeCustomerId)
 
   return (
       <div className="grid gap-8">
@@ -45,8 +42,6 @@ export default async function BillingPage() {
         <BillingInfo
           subscriptionPlan={subscriptionPlan}
         />
-
-       { userInvoices?.length ? <UserInvoicesTable data={userInvoices ?? []} /> : null }
       </div>
   )
 }

@@ -1,5 +1,5 @@
 import type { DashboardConfig } from "@/types/config"
-import {  BarChartBig, PanelLeftClose, PanelLeftOpen, Settings, Sheet } from "lucide-react"
+import {  BarChartBig, CreditCard, PanelLeftClose, PanelLeftOpen, Receipt } from "lucide-react"
 
 export const dashboardConfig: DashboardConfig = {
   mainNav: [
@@ -37,18 +37,16 @@ export const dashboardConfig: DashboardConfig = {
         href: "/dashboard",
       },
       {
-        title: "Items",
-        label: "20",
-        icon: Sheet,
+        title: "Subscription",
+        icon: CreditCard,
         variant: "default",
-        href: "/dashboard/items",
+        href: "/dashboard/subscription",
       },
       {
-        title: "Settings",
-        label: "",
-        icon: Settings,
-        variant: "ghost",
-        href: "/dashboard/settings",
+        title: "Invoices",
+        icon: Receipt,
+        variant: "default",
+        href: "/dashboard/invoices",
       },
     ],
   }

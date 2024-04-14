@@ -65,10 +65,6 @@ export function UserNav({ user }: IUser) {
               Account
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <PlusCircle className="mr-2 h-4 w-4" />
-            <span>New Team</span>
-          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">

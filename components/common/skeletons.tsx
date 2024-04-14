@@ -30,3 +30,31 @@ export function DashboardHeaderSkeleton() {
     </Card>
   )
 }
+
+export function TableSkeleton({className}: {className?: string}) {
+  return (
+    <Card className={className ?? ''}>
+      <CardHeader>
+        <Skeleton className="h-5 w-32" />
+      </CardHeader>
+      <CardContent className="grid gap-3 grid-cols-3 md:grid-cols-4">
+        <Skeleton className="h-7 w-32" />
+        <Skeleton className="h-7 w-32" />
+        <Skeleton className="h-7 w-32" />
+        <Skeleton className="h-7 w-32" />
+        <Skeleton className="h-7 w-32" />
+        <Skeleton className="h-7 w-32" />
+        <Skeleton className="h-7 w-32" />
+        <Skeleton className="h-7 w-32" />
+        <Skeleton className="h-7 w-32" />
+        <Skeleton className="h-7 w-32" />
+        <Skeleton className="h-7 w-32" />
+        <Skeleton className="h-7 w-32" />
+        <Skeleton className="h-7 w-32" />
+        <Skeleton className="h-7 w-32" />
+        <Skeleton className="h-7 w-32" />
+        <Skeleton className="h-7 w-32" />
+      </CardContent>
+    </Card>
+  )
+}

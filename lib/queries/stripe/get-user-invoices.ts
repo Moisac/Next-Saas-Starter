@@ -7,7 +7,7 @@ export async function getUserInvoices(stripeCustomerId: string): Promise<Invoice
         const invoices = await stripe.invoices.list({
             customer: stripeCustomerId,
         });
-console.log(invoices.data)
+
         // Extract relevant information from invoices
         const userInvoices = invoices.data.map((invoice) => ({
             id: invoice.id,
