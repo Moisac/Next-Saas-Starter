@@ -115,7 +115,7 @@ const columns = [
 
 export function UserInvoicesTable({ data }: UserInvoiceTable) {
   return (
-    <Card className="max-w-[1300px]">
+    <Card>
       <CardHeader>
         <CardTitle>Invoices</CardTitle>
       </CardHeader>
