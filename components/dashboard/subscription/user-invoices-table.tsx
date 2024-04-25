@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Table } from "@/components/common/table"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 interface UserInvoiceTable {
   data: Invoice[]
@@ -86,7 +86,6 @@ const columns = [
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem
           onClick={() => navigator.clipboard.writeText(row.original.id)}
           className="cursor-pointer"
@@ -120,7 +119,7 @@ export function UserInvoicesTable({ data }: UserInvoiceTable) {
         <CardTitle>Invoices</CardTitle>
       </CardHeader>
       <CardContent>
-        <Table data={data} columns={columns} />
+        <Table data={data} columns={columns} searchColumn="customer_email"/>
       </CardContent>
     </Card>
   )

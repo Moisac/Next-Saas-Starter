@@ -1,6 +1,6 @@
 import { CardSkeleton } from "@/components/common/skeletons";
 
-export default function DashboardBillingLoading() {
+export default function DashboardSubscriptionLoading() {
   return (
     <div>
         <CardSkeleton />

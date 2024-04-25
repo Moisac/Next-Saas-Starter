@@ -1,6 +1,6 @@
 import { TableSkeleton } from "@/components/common/skeletons";
 
-export default function DashboardInvoicesLoading() {
+export default function DashboardUsersLoading() {
   return (
     <div>
         <TableSkeleton />

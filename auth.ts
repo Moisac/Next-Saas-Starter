@@ -30,6 +30,7 @@ export const {
 
         session.user.name = token.name;
         session.user.image = token.picture;
+        session.user.role = token.role;
       }
 
       return session
@@ -45,6 +46,7 @@ export const {
       token.name = dbUser.name;
       token.email = dbUser.email;
       token.picture = dbUser.image;
+      token.role = dbUser.role;
 
       return token;
     },

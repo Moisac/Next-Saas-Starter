@@ -1,4 +1,3 @@
-import { TableSkeleton } from "@/components/common/skeletons"
 import { UserInvoicesTable } from "@/components/dashboard/subscription/user-invoices-table"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { getUserInvoices } from "@/lib/queries/stripe/get-user-invoices"
@@ -23,7 +22,7 @@ export default async function InvoicesPage() {
 
     return (
         <>
-            { userInvoices?.length ? <UserInvoicesTable data={userInvoices ?? []} /> : 
+            { userInvoices?.length ? <UserInvoicesTable data={userInvoices} /> : 
                 (
                     <Alert variant="info" className="!pl-14">
                         <TriangleAlert />

@@ -25,11 +25,13 @@ import { Input } from "@/components/ui/input"
 interface TableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  searchColumn: string;
 }
 
 export function Table<TData, TValue>({
   columns,
   data,
+  searchColumn
 }: TableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -52,12 +54,12 @@ export function Table<TData, TValue>({
     <div>
         <div className="flex items-center py-4">
             <Input
-            placeholder="Search by email"
-            value={(table.getColumn("customer_email")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-                table.getColumn("customer_email")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
+                placeholder={`Search by ${searchColumn.replace('_', ' ')}`}
+                value={(table.getColumn(searchColumn)?.getFilterValue() as string) ?? ""}
+                onChange={(event) =>
+                    table.getColumn(searchColumn)?.setFilterValue(event.target.value)
+                }
+                className="max-w-sm"
             />
         </div>
         <div className="rounded-md border">

@@ -1,3 +1,5 @@
+'use server'
+
 import { pricingData } from "@/config/subscriptions";
 import prisma from "@/lib/db";
 import { stripe } from "@/lib/stripe";

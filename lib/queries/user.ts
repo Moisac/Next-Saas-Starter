@@ -1,11 +1,13 @@
 import prisma from "@/lib/db";
 import { auth } from "@/auth";
+import { Role } from "@/types/user";
 
 export const getUserByEmail = async (email: string) => {
   try {
     const user = await prisma.user.findUnique({
       where: {
         email: email,
+        isActive: true
       },
       select: {
         name: true,
@@ -21,7 +23,9 @@ export const getUserByEmail = async (email: string) => {
 
 export const getUserById = async (id: string) => {
   try {
-    const user = await prisma.user.findUnique({ where: { id } });
+    const user = await prisma.user.findUnique({ 
+      where: { id, isActive: true } ,
+    });
 
     return user;
   } catch {
@@ -34,3 +38,13 @@ export const getLoggedUser = async () => {
 
     return session?.user;
 }
+
+export const getUsersList = async () => {
+  try {
+    const users = await prisma.user.findMany({ where: { role: Role.USER } });
+
+    return users;
+  } catch {
+    return null;
+  }
+};

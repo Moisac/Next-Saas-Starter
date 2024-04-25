@@ -9,6 +9,9 @@ export default {
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID ?? '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
+      // profile(profile) {
+      //   return { emailVerified: profile.email_verified }
+      // },
     }),
 
     // Custom provider for sending maginc links using Resend api

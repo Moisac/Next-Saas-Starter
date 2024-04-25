@@ -4,6 +4,10 @@ import { format } from 'date-fns'
   
 export async function getUserInvoices(stripeCustomerId: string): Promise<Invoice[] | null> {
     try {
+
+        if (!stripeCustomerId){
+            return null
+        }
         const invoices = await stripe.invoices.list({
             customer: stripeCustomerId,
         });
