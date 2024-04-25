@@ -1,6 +1,6 @@
 'use client'
 
-import { BarChartBig, LogOut, PlusCircle, User } from "lucide-react"
+import { BarChartBig, LogOut, PlusCircle, User, Users } from "lucide-react"
 
 import {
   Avatar,
@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
-import { User as UserType } from "@/types/user"
+import { Role, User as UserType } from "@/types/user"
 import { logout } from "@/actions/auth/logout"
 
 export interface IUser {
@@ -65,6 +65,19 @@ export function UserNav({ user }: IUser) {
               Account
             </Link>
           </DropdownMenuItem>
+         { user?.role == Role.ADMIN ?
+            (
+              <DropdownMenuItem>
+                <Users className="mr-2 h-4 w-4" />
+                <Link
+                  href="/dashboard/users"
+                  className="text-sm font-medium transition-colors hover:text-primary"
+                >
+                  Users
+                </Link>
+              </DropdownMenuItem>
+            ) : null 
+          }
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
