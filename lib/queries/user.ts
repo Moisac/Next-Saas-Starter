@@ -24,7 +24,7 @@ export const getUserByEmail = async (email: string) => {
 export const getUserById = async (id: string) => {
   try {
     const user = await prisma.user.findUnique({ 
-      where: { id, isActive: true } ,
+      where: { id, isActive: true },
     });
 
     return user;
@@ -35,6 +35,11 @@ export const getUserById = async (id: string) => {
 
 export const getLoggedUser = async () => {
     const session = await auth();
+
+    if(!session?.user?.isActive) {
+      return null
+    }
+    console.log(session?.user)
 
     return session?.user;
 }

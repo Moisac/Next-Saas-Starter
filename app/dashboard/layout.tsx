@@ -19,6 +19,10 @@ export default async function DashboardLayout({
     redirect('/login')
   }
 
+  if(user && !user.isActive) {
+    redirect('/')
+  }
+
   return (
     <div className="flex min-h-screen flex-col space-y-6">
       <div className="flex gap-1">

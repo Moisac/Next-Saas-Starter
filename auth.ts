@@ -31,6 +31,7 @@ export const {
         session.user.name = token.name;
         session.user.image = token.picture;
         session.user.role = token.role;
+        session.user.isActive = token.isActive;
       }
 
       return session
@@ -41,12 +42,13 @@ export const {
 
       const dbUser = await getUserById(token.sub);
 
-      if (!dbUser) return token;
+      if (!dbUser || !dbUser.isActive) return;
 
       token.name = dbUser.name;
       token.email = dbUser.email;
       token.picture = dbUser.image;
       token.role = dbUser.role;
+      token.isActive = dbUser.isActive;
 
       return token;
     },

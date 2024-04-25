@@ -31,7 +31,7 @@ export async function UserAuth({ className, type, ...props }: UserAuthProps) {
   const [isFormLoading, setIsFormLoading] = useState<boolean>(false)
   const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false)
   const [magicLinkFormStatus, setMagicLinkFormStatus] = useState<MagicLinkStatus>('default')
-  const [validationErrors, setValidationErrors] = useState<string>()
+  const [validationErrors, setValidationErrors] = useState<{ validation: { email?: string[] } }>()
 
   const searchParams = useSearchParams()
 
