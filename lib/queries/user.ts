@@ -39,7 +39,6 @@ export const getLoggedUser = async () => {
     if(!session?.user?.isActive) {
       return null
     }
-    console.log(session?.user)
 
     return session?.user;
 }
